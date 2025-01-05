@@ -58,7 +58,7 @@
 //                     |      |      |      |        |  |       |      |       |       |
             bindings = <
 &trans    &kp N1 &kp N2 &kp N3  &kp N4  &kp N5                       &trans      &trans    &trans    &trans      &trans     &kp DEL
-&kp GRAVE &kp N6 &kp N7 &kp N8  &kp N9  &kp N0                       &kp HOME    &kp N7    &kp UP    &kp trans   &kp PG_UP  &trans
+&kp GRAVE &kp N6 &kp N7 &kp N8  &kp N9  &kp N0                       &kp HOME    &trans    &kp UP    &trans      &kp PG_UP  &trans
 &kp F1    &kp F2 &kp F3 &kp F4  &kp F5  &kp F6                       &kp END     &kp LEFT  &kp DOWN  &kp RIGHT   &kp PG_DN  &trans
 &kp F7    &kp F8 &kp F9 &kp F10 &kp F11 &kp F12   &trans   &trans    &kp KP_PLUS &kp MINUS &kp EQUAL &kp LBKT    &kp RBKT   &kp BSLH
                         &trans  &trans  &trans    &trans   &trans    &trans      &trans    &trans
