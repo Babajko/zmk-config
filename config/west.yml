@@ -6,6 +6,8 @@ manifest:
     # See https://docs.zephyrproject.org/3.2.0/develop/west/manifest.html#projects
     - name: Babajko
       url-base: https://github.com/Babajko
+    - name: mctechnology17
+      url-base: https://github.com/mctechnology17
   projects:
     - name: zmk
       remote: zmkfirmware
@@ -13,6 +15,9 @@ manifest:
       import: app/west.yml
     - name: zmk-oled-adapter
       remote: Babajko
+      revision: main
+   - name: zmk-nice-oled
+      remote: mctechnology17
       revision: main
   self:
     path: config
