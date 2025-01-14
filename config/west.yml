@@ -15,9 +15,6 @@ manifest:
       import: app/west.yml
     - name: zmk-oled-adapter
       remote: Babajko
-      revision: sh1107
-  #  - name: zmk-nice-oled
-  #     remote: mctechnology17
-  #     revision: main
+      revision: main
   self:
     path: config
