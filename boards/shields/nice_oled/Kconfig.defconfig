@@ -2,11 +2,9 @@ if SHIELD_NICE_OLED
 
 config LV_Z_VDB_SIZE
     default 64
-    # default 100
 
 config LV_DPI_DEF
-    default 148
-    # default 161
+    default 128
 
 config LV_Z_BITS_PER_PIXEL
     default 1
