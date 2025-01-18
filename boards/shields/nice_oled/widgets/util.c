@@ -25,7 +25,11 @@ void rotate_canvas(lv_obj_t *canvas, lv_color_t cbuf[]) {
 
 void draw_background(lv_obj_t *canvas) {
   lv_draw_rect_dsc_t rect_black_dsc;
-  init_rect_dsc(&rect_black_dsc, LVGL_BACKGROUND);
+  // init_rect_dsc(&rect_black_dsc, LVGL_BACKGROUND);
+  //  rect_black_dsc.border_color = lv_color_white();
+  //  rect_black_dsc.border_width = 2;
+  lv_draw_rect_dsc_init(&rect_black_dsc);
+  rect_black_dsc.bg_color = lv_color_white();
 
   lv_canvas_draw_rect(canvas, 0, 0, CANVAS_WIDTH, CANVAS_HEIGHT,
                       &rect_black_dsc);
