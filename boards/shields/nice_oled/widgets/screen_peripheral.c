@@ -12,6 +12,7 @@ LOG_MODULE_DECLARE(zmk, CONFIG_ZMK_LOG_LEVEL);
 #include <zmk/events/usb_conn_state_changed.h>
 #include <zmk/split/bluetooth/peripheral.h>
 #include <zmk/usb.h>
+#include <zephyr/sys/__assert.h>
 
 #include "animation.h"
 #include "battery.h"
@@ -113,6 +114,7 @@ ZMK_SUBSCRIPTION(widget_peripheral_status, zmk_split_peripheral_status_changed);
  **/
 
 int zmk_widget_screen_init(struct zmk_widget_screen *widget, lv_obj_t *parent) {
+  __ASSERT_NO_MSG(test);
   widget->obj = lv_obj_create(parent);
   lv_obj_set_size(widget->obj, CANVAS_HEIGHT, CANVAS_WIDTH);
 
