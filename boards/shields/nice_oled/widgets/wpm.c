@@ -16,15 +16,17 @@ LV_IMG_DECLARE(bongo_cat_both1);
 LV_IMG_DECLARE(bongo_cat_both1_open);
 LV_IMG_DECLARE(bongo_cat_both2);
 
-static void draw_gauge(lv_obj_t *canvas, const struct status_state *state) {
+static void draw_gauge(lv_obj_t *canvas, const struct status_state *state, const struct util_position *pos) {
   lv_draw_img_dsc_t img_dsc;
   lv_draw_img_dsc_init(&img_dsc);
 
-  lv_canvas_draw_img(canvas, 0, 70, &gauge, &img_dsc);
+  const int x = pos->x;
+  const int y = pos->y + 70;
+  lv_canvas_draw_img(canvas, x, y, &gauge, &img_dsc);
   // lv_canvas_draw_img(canvas, 16, 43, &gauge, &img_dsc);
 }
 
-static void draw_needle(lv_obj_t *canvas, const struct status_state *state) {
+static void draw_needle(lv_obj_t *canvas, const struct status_state *state, const struct util_position *pos) {
   lv_draw_line_dsc_t line_dsc;
   init_line_dsc(&line_dsc, LVGL_FOREGROUND, 1);
 
@@ -67,22 +69,24 @@ static void draw_needle(lv_obj_t *canvas, const struct status_state *state) {
   int needleEndX = centerX + (int)(radius * cos(angleRad));
   int needleEndY = centerY + (int)(radius * sin(angleRad));
 
-  lv_point_t points[2] = {{needleStartX, needleStartY},
-                          {needleEndX, needleEndY}};
+  lv_point_t points[2] = {{needleStartX + pos->x, needleStartY + pos->y},
+                          {needleEndX + pos->x, needleEndY + pos->y}};
   // canvas, points, number of points, line_dsc
   lv_canvas_draw_line(canvas, points, 2, &line_dsc);
   // lv_canvas_draw_line(canvas, points, 2, &line_dsc);
 }
 
-static void draw_grid(lv_obj_t *canvas) {
+static void draw_grid(lv_obj_t *canvas, const struct util_position *pos) {
   lv_draw_img_dsc_t img_dsc;
   lv_draw_img_dsc_init(&img_dsc);
 
-  lv_canvas_draw_img(canvas, -1, 95, &grid, &img_dsc);
+  const int x = pos->x + -1; 
+  const int y = pos->y + 95;
+  lv_canvas_draw_img(canvas, x, y, &grid, &img_dsc);
   // lv_canvas_draw_img(canvas, -1, 100, &grid, &img_dsc);
 }
 
-static void draw_graph(lv_obj_t *canvas, const struct status_state *state) {
+static void draw_graph(lv_obj_t *canvas, const struct status_state *state, const struct util_position *pos) {
   lv_draw_line_dsc_t line_dsc;
   init_line_dsc(&line_dsc, LVGL_FOREGROUND, 2);
   lv_point_t points[10];
@@ -103,6 +107,8 @@ static void draw_graph(lv_obj_t *canvas, const struct status_state *state) {
     points[i].x = -36 + i * 7.4;
     points[i].y = 127 - (value * 32 / max);
     // points[i].y = 132 - (value * 32 / max);
+    points[i].x += pos->x;
+    points[i].y += pos->y;
   }
 #else
   int max = 0;
@@ -125,13 +131,15 @@ static void draw_graph(lv_obj_t *canvas, const struct status_state *state) {
   for (int i = 0; i < 10; i++) {
     points[i].x = 0 + i * 7.4;
     points[i].y = 97 - (state->wpm[i] - min) * 32 / range;
+    points[i].x += pos->x;
+    points[i].y += pos->y;
   }
 #endif
 
   lv_canvas_draw_line(canvas, points, 10, &line_dsc);
 }
 
-static void draw_label(lv_obj_t *canvas, const struct status_state *state) {
+static void draw_label(lv_obj_t *canvas, const struct status_state *state, const struct util_position *pos) {
   lv_draw_label_dsc_t label_dsc_wpm;
   init_label_dsc(&label_dsc_wpm, LVGL_FOREGROUND, &pixel_operator_mono_12,
                  LV_TEXT_ALIGN_LEFT);
@@ -143,15 +151,21 @@ static void draw_label(lv_obj_t *canvas, const struct status_state *state) {
   snprintf(wpm_text, sizeof(wpm_text), "%d", state->wpm[9]);
   // if wpm < 10, elsse if wpm => 10 and wpm < 100, else wpm >= 100
   if (state->wpm[9] < 10) {
-    lv_canvas_draw_text(canvas, 12, 75, 50, &label_dsc_wpm, wpm_text);
+    const int x = pos->x + 12;
+    const int y = pos->y + 75;
+    lv_canvas_draw_text(canvas, x, y, 50, &label_dsc_wpm, wpm_text);
     // lv_canvas_draw_text(canvas, 12, 75, 50, &label_dsc_wpm, wpm_text); //
     // with global font
   } else if (state->wpm[9] >= 10 && state->wpm[9] < 100) {
-    lv_canvas_draw_text(canvas, 9, 75, 50, &label_dsc_wpm, wpm_text);
+    const int x = pos->x + 9;
+    const int y = pos->y + 75;
+    lv_canvas_draw_text(canvas, x, y, 50, &label_dsc_wpm, wpm_text);
     // lv_canvas_draw_text(canvas, 8, 75, 50, &label_dsc_wpm, wpm_text); // with
     // global font
   } else {
-    lv_canvas_draw_text(canvas, 7, 75, 50, &label_dsc_wpm, wpm_text);
+    const int x = pos->x + 7;
+    const int y = pos->y + 75;
+    lv_canvas_draw_text(canvas, x, y, 50, &label_dsc_wpm, wpm_text);
     // lv_canvas_draw_text(canvas, 5, 75, 50, &label_dsc_wpm, wpm_text); // with
     // global font
   }
@@ -208,12 +222,12 @@ static void draw_bongocat(lv_obj_t *canvas, const struct status_state *state) {
   lv_animimg_start(art);
 }
 
-void draw_wpm_status(lv_obj_t *canvas, const struct status_state *state) {
-  draw_gauge(canvas, state);
-  draw_needle(canvas, state);
-  draw_grid(canvas);
-  draw_graph(canvas, state);
-  draw_label(canvas, state);
+void draw_wpm_status(lv_obj_t *canvas, const struct status_state *state, const struct util_position *pos) {
+  draw_gauge(canvas, state, pos);
+  draw_needle(canvas, state, pos);
+  draw_grid(canvas, pos);
+  draw_graph(canvas, state, pos);
+  draw_label(canvas, state, pos);
   // TODO: STAR
   // draw_bongocat(canvas, state);
   // TODO: END

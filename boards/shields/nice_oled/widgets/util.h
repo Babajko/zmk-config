@@ -4,8 +4,19 @@
 #include <zmk/endpoints.h>
 
 #define CANVAS_WIDTH 64
-#define CANVAS_HEIGHT 150
-#define CANVAS_SIZE 150
+#define CANVAS_HEIGHT 128
+#define UTIL_ROTATE 2700
+
+#define WIDGET_OUTPUT_POS_X 4
+#define WIDGET_OUTPUT_POS_Y 32
+
+#define WIDGET_LAYAR_POS_X 0
+#define WIDGET_LAYAR_POS_Y 50
+
+struct util_position {
+    int x;
+    int y;
+};
 
 #define LVGL_BACKGROUND                                                                            \
     IS_ENABLED(CONFIG_NICE_VIEW_WIDGET_INVERTED) ? lv_color_black() : lv_color_white()

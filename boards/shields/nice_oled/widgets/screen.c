@@ -1,3 +1,4 @@
+#include "util.h"
 #include <zephyr/kernel.h>
 
 #include <zephyr/logging/log.h>
@@ -31,20 +32,43 @@ static sys_slist_t widgets = SYS_SLIST_STATIC_INIT(&widgets);
  * Draw canvas
  **/
 
+static void draw_rectangle_with_border(lv_obj_t *canvas, const struct util_position *pos) {
+    // static lv_color_t cbuf[CANVAS_HEIGHT * CANVAS_HEIGHT];
+    // lv_canvas_set_buffer(canvas, cbuf, CANVAS_HEIGHT, CANVAS_HEIGHT, LV_IMG_CF_TRUE_COLOR);
+
+    // lv_canvas_fill_bg(canvas, lv_color_white(), LV_OPA_COVER);
+
+    lv_draw_rect_dsc_t rect_dsc;
+    lv_draw_rect_dsc_init(&rect_dsc);
+    rect_dsc.border_color = lv_color_black();
+    rect_dsc.border_width = 2;
+
+    lv_canvas_draw_rect(canvas, pos->x + 10, pos->y + 10, 40, 100, &rect_dsc);
+}
+
 static void draw_canvas(lv_obj_t *widget, lv_color_t cbuf[],
                         const struct status_state *state) {
   lv_obj_t *canvas = lv_obj_get_child(widget, 0);
+  
+  const struct util_position zero_pos = {CANVAS_HEIGHT / 2, 0};
 
   // Draw widgets
   draw_background(canvas);
-  // draw_output_status(canvas, state);
-  // draw_battery_status(canvas, state);
-  // draw_wpm_status(canvas, state);
-  // draw_profile_status(canvas, state);
-  // draw_layer_status(canvas, state);
+  // draw_rectangle_with_border(canvas, &zero_pos);
+  draw_output_status(canvas, state, &zero_pos);
+
+  const struct util_position w_battery_pos = {.x = zero_pos.x + 32, .y = zero_pos.y};
+  draw_battery_status(canvas, state, &w_battery_pos);
+
+  draw_wpm_status(canvas, state, &zero_pos);
+  
+  draw_profile_status(canvas, state, &zero_pos);
+
+  const struct util_position w_status_pos = {.x = zero_pos.x, .y = zero_pos.y + WIDGET_LAYAR_POS_Y};
+  draw_layer_status(canvas, state, &w_status_pos);
 
   // Rotate for horizontal display
-  // rotate_canvas(canvas, cbuf);
+  rotate_canvas(canvas, cbuf);
 }
 
 /**
