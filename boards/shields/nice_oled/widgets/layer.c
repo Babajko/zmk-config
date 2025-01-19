@@ -4,7 +4,7 @@
 #include <zephyr/kernel.h>
 
 // MC: better implementation
-void draw_layer_status(lv_obj_t *canvas, const struct status_state *state) {
+void draw_layer_status(lv_obj_t *canvas, const struct status_state *state, const struct util_position *pos) {
   lv_draw_label_dsc_t label_dsc;
   init_label_dsc(&label_dsc, LVGL_FOREGROUND, &pixel_operator_mono,
                  LV_TEXT_ALIGN_LEFT);
@@ -28,6 +28,5 @@ void draw_layer_status(lv_obj_t *canvas, const struct status_state *state) {
   if (result >= sizeof(text)) {
     LV_LOG_WARN("truncated");
   }
-
-  lv_canvas_draw_text(canvas, 0, 146, 68, &label_dsc, text);
+  lv_canvas_draw_text(canvas, pos->x , pos->y, WIDGET_LAYAR_TEXT_WIDTH, &label_dsc, text);
 }
