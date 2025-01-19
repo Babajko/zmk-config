@@ -9,29 +9,26 @@ void to_uppercase(char *str) {
 }
 
 void rotate_canvas(lv_obj_t *canvas, lv_color_t cbuf[]) {
-  static lv_color_t cbuf_tmp[CANVAS_SIZE * CANVAS_SIZE];
+  static lv_color_t cbuf_tmp[CANVAS_HEIGHT * CANVAS_HEIGHT];
   memcpy(cbuf_tmp, cbuf, sizeof(cbuf_tmp));
 
   lv_img_dsc_t img;
   img.data = (void *)cbuf_tmp;
   img.header.cf = LV_IMG_CF_TRUE_COLOR;
-  img.header.w = CANVAS_SIZE;
-  img.header.h = CANVAS_SIZE;
+  img.header.w = CANVAS_HEIGHT;
+  img.header.h = CANVAS_HEIGHT;
 
   lv_canvas_fill_bg(canvas, LVGL_BACKGROUND, LV_OPA_COVER);
-  lv_canvas_transform(canvas, &img, 900, LV_IMG_ZOOM_NONE, -1, 0,
-                      CANVAS_SIZE / 2, CANVAS_SIZE / 2, false);
+  lv_canvas_transform(canvas, &img, UTIL_ROTATE, LV_IMG_ZOOM_NONE, 0, 0,
+                      CANVAS_HEIGHT / 2, CANVAS_HEIGHT / 2, false);
 }
 
 void draw_background(lv_obj_t *canvas) {
   lv_draw_rect_dsc_t rect_black_dsc;
-  // init_rect_dsc(&rect_black_dsc, LVGL_BACKGROUND);
-  //  rect_black_dsc.border_color = lv_color_white();
-  //  rect_black_dsc.border_width = 2;
   lv_draw_rect_dsc_init(&rect_black_dsc);
   rect_black_dsc.bg_color = lv_color_white();
 
-  lv_canvas_draw_rect(canvas, 0, 0, CANVAS_WIDTH, CANVAS_HEIGHT,
+  lv_canvas_draw_rect(canvas, 0, 0, CANVAS_HEIGHT, CANVAS_HEIGHT,
                       &rect_black_dsc);
 }
 

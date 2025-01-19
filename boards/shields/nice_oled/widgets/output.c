@@ -8,41 +8,48 @@ LV_IMG_DECLARE(bt);
 LV_IMG_DECLARE(usb);
 
 #if !IS_ENABLED(CONFIG_ZMK_SPLIT) || IS_ENABLED(CONFIG_ZMK_SPLIT_ROLE_CENTRAL)
-static void draw_usb_connected(lv_obj_t *canvas) {
+static void draw_usb_connected(lv_obj_t *canvas, const struct util_position *pos) {
   lv_draw_img_dsc_t img_dsc;
   lv_draw_img_dsc_init(&img_dsc);
 
-  lv_canvas_draw_img(canvas, 0, 34, &usb, &img_dsc);
+  const int x = pos->x;
+  const int y = pos->y + 2;
+  lv_canvas_draw_img(canvas, x, y, &usb, &img_dsc);
   // lv_canvas_draw_img(canvas, 45, 2, &usb, &img_dsc);
 }
 
-static void draw_ble_unbonded(lv_obj_t *canvas) {
+static void draw_ble_unbonded(lv_obj_t *canvas, const struct util_position *pos) {
   lv_draw_img_dsc_t img_dsc;
   lv_draw_img_dsc_init(&img_dsc);
 
   // 36 - 39
-  lv_canvas_draw_img(canvas, -1, 32, &bt_unbonded, &img_dsc);
+  const int x = pos->x + -1;
+  const int y = pos->y;
+  lv_canvas_draw_img(canvas, x, y, &bt_unbonded, &img_dsc);
   // lv_canvas_draw_img(canvas, 44, 0, &bt_unbonded, &img_dsc);
 }
 #endif
 
-static void draw_ble_disconnected(lv_obj_t *canvas) {
+static void draw_ble_disconnected(lv_obj_t *canvas, const struct util_position *pos) {
   lv_draw_img_dsc_t img_dsc;
   lv_draw_img_dsc_init(&img_dsc);
 
-  lv_canvas_draw_img(canvas, 4, 32, &bt_no_signal, &img_dsc);
+  const int x = pos->x;
+  const int y = pos->y;
+  lv_canvas_draw_img(canvas, x, y, &bt_no_signal, &img_dsc);
   // lv_canvas_draw_img(canvas, 49, 0, &bt_no_signal, &img_dsc);
 }
 
-static void draw_ble_connected(lv_obj_t *canvas) {
+static void draw_ble_connected(lv_obj_t *canvas, const struct util_position *pos) {
   lv_draw_img_dsc_t img_dsc;
   lv_draw_img_dsc_init(&img_dsc);
-
-  lv_canvas_draw_img(canvas, 4, 32, &bt, &img_dsc);
+  const int x = pos->x;
+  const int y = pos->y;
+  lv_canvas_draw_img(canvas, x, y, &bt, &img_dsc);
   // lv_canvas_draw_img(canvas, 49, 0, &bt, &img_dsc);
 }
 
-void draw_output_status(lv_obj_t *canvas, const struct status_state *state) {
+void draw_output_status(lv_obj_t *canvas, const struct status_state *state, const struct util_position *pos) {
   /*
    * WHITOUT BACKGROUND
   lv_draw_rect_dsc_t rect_white_dsc;
@@ -53,26 +60,26 @@ void draw_output_status(lv_obj_t *canvas, const struct status_state *state) {
 #if !IS_ENABLED(CONFIG_ZMK_SPLIT) || IS_ENABLED(CONFIG_ZMK_SPLIT_ROLE_CENTRAL)
   switch (state->selected_endpoint.transport) {
   case ZMK_TRANSPORT_USB:
-    draw_usb_connected(canvas);
+    draw_usb_connected(canvas, pos);
     break;
 
   case ZMK_TRANSPORT_BLE:
     if (state->active_profile_bonded) {
       if (state->active_profile_connected) {
-        draw_ble_connected(canvas);
+        draw_ble_connected(canvas, pos);
       } else {
-        draw_ble_disconnected(canvas);
+        draw_ble_disconnected(canvas, pos);
       }
     } else {
-      draw_ble_unbonded(canvas);
+      draw_ble_unbonded(canvas, pos);
     }
     break;
   }
 #else
   if (state->connected) {
-    draw_ble_connected(canvas);
+    draw_ble_connected(canvas, pos);
   } else {
-    draw_ble_disconnected(canvas);
+    draw_ble_disconnected(canvas, pos);
   }
 #endif
 }
