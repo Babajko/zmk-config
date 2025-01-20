@@ -57,6 +57,9 @@ static void draw_canvas(lv_obj_t *widget, lv_color_t cbuf[],
   // draw_rectangle_with_border(canvas, &zero_pos);
   draw_output_status(canvas, state, &zero_pos);
 
+  const struct util_position w_profile_text_pos = {.x = zero_pos.x + 25, .y = zero_pos.y};
+  draw_active_profile_text(canvas, state, &w_profile_text_pos);
+
   const struct util_position w_battery_pos = {.x = zero_pos.x + 32, .y = zero_pos.y};
   draw_battery_status(canvas, state, &w_battery_pos);
 
