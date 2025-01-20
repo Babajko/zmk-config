@@ -60,8 +60,8 @@ static void draw_canvas(lv_obj_t *widget, lv_color_t cbuf[],
   const struct util_position w_battery_pos = {.x = zero_pos.x + 32, .y = zero_pos.y};
   draw_battery_status(canvas, state, &w_battery_pos);
 
-  draw_wpm_status(canvas, state, &zero_pos);
-  
+  //   draw_wpm_status(canvas, state, &zero_pos);
+
   draw_profile_status(canvas, state, &zero_pos);
 
   const struct util_position w_status_pos = {.x = zero_pos.x, .y = zero_pos.y + WIDGET_LAYAR_POS_Y};
