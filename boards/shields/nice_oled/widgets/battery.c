@@ -19,7 +19,6 @@ static void draw_level(lv_obj_t *canvas, const struct status_state *state, const
   const int x = pos->x;
   const int y = pos->y;
   lv_canvas_draw_text(canvas, x, y, 42, &label_right_dsc, text);
-  // lv_canvas_draw_text(canvas, -6, 50, 42, &label_right_dsc, text);
 }
 
 static void draw_charging_level(lv_obj_t *canvas,
@@ -38,10 +37,8 @@ static void draw_charging_level(lv_obj_t *canvas,
   int x = pos->x;
   const int y = pos->y;
   lv_canvas_draw_text(canvas, x, y, 35, &label_right_dsc, text);
-  // lv_canvas_draw_text(canvas, 1, 50, 35, &label_right_dsc, text);
   x += 25;
   lv_canvas_draw_img(canvas, x, y, &bolt, &img_dsc);
-  // lv_canvas_draw_img(canvas, 0, 50, &bolt, &img_dsc);
 }
 
 void draw_battery_status(lv_obj_t *canvas, const struct status_state *state, const struct util_position *pos) {
