@@ -15,7 +15,6 @@ static void draw_usb_connected(lv_obj_t *canvas, const struct util_position *pos
   const int x = pos->x;
   const int y = pos->y + 2;
   lv_canvas_draw_img(canvas, x, y, &usb, &img_dsc);
-  // lv_canvas_draw_img(canvas, 45, 2, &usb, &img_dsc);
 }
 
 static void draw_ble_unbonded(lv_obj_t *canvas, const struct util_position *pos) {
@@ -26,7 +25,6 @@ static void draw_ble_unbonded(lv_obj_t *canvas, const struct util_position *pos)
   const int x = pos->x + -1;
   const int y = pos->y;
   lv_canvas_draw_img(canvas, x, y, &bt_unbonded, &img_dsc);
-  // lv_canvas_draw_img(canvas, 44, 0, &bt_unbonded, &img_dsc);
 }
 #endif
 
@@ -37,7 +35,6 @@ static void draw_ble_disconnected(lv_obj_t *canvas, const struct util_position *
   const int x = pos->x;
   const int y = pos->y;
   lv_canvas_draw_img(canvas, x, y, &bt_no_signal, &img_dsc);
-  // lv_canvas_draw_img(canvas, 49, 0, &bt_no_signal, &img_dsc);
 }
 
 static void draw_ble_connected(lv_obj_t *canvas, const struct util_position *pos) {
@@ -46,7 +43,6 @@ static void draw_ble_connected(lv_obj_t *canvas, const struct util_position *pos
   const int x = pos->x;
   const int y = pos->y;
   lv_canvas_draw_img(canvas, x, y, &bt, &img_dsc);
-  // lv_canvas_draw_img(canvas, 49, 0, &bt, &img_dsc);
 }
 
 void draw_output_status(lv_obj_t *canvas, const struct status_state *state, const struct util_position *pos) {
