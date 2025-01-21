@@ -49,7 +49,7 @@ static void draw_rectangle_with_border(lv_obj_t *canvas, const struct util_posit
 static void draw_canvas(lv_obj_t *widget, lv_color_t cbuf[],
                         const struct status_state *state) {
   lv_obj_t *canvas = lv_obj_get_child(widget, 0);
-  
+
   const struct util_position zero_pos = {CANVAS_HEIGHT / 2, 0};
 
   // Draw widgets
@@ -63,10 +63,10 @@ static void draw_canvas(lv_obj_t *widget, lv_color_t cbuf[],
   draw_battery_status(canvas, state, &w_battery_pos);
 
   //   draw_wpm_status(canvas, state, &zero_pos);
-  const struct util_position w_profile_pos = {.x = zero_pos.x, .y = zero_pos.y};
+  const struct util_position w_profile_pos = {.x = zero_pos.x + 5, .y = zero_pos.y + 25};
   draw_profile_status(canvas, state, &w_profile_pos);
 
-  const struct util_position w_status_pos = {.x = zero_pos.x, .y = zero_pos.y + WIDGET_LAYAR_POS_Y};
+  const struct util_position w_status_pos = {.x = zero_pos.x, .y = zero_pos.y + 40};
   draw_layer_status(canvas, state, &w_status_pos);
 
   // Rotate for horizontal display
