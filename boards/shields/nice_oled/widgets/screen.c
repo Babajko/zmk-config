@@ -95,6 +95,13 @@ static void battery_status_update_cb(struct battery_status_state state) {
 
 static struct battery_status_state
 battery_status_get_state(const zmk_event_t *eh) {
+	if (as_zmk_peripheral_battery_state_changed(eh) != NULL) {
+		const struct zmk_peripheral_battery_state_changed *ev =
+				as_zmk_peripheral_battery_state_changed(eh);
+
+		LOG_DBG("peripheral_battery_state_changed, source: %d, state_of_charge: %d", ev->source + 1,
+				ev->state_of_charge);
+	}
   const struct zmk_battery_state_changed *ev = as_zmk_battery_state_changed(eh);
 
   return (struct battery_status_state){
@@ -110,7 +117,7 @@ ZMK_DISPLAY_WIDGET_LISTENER(widget_battery_status, struct battery_status_state,
                             battery_status_update_cb, battery_status_get_state);
 
 ZMK_SUBSCRIPTION(widget_battery_status, zmk_battery_state_changed);
-// ZMK_SUBSCRIPTION(widget_battery_status, zmk_peripheral_battery_state_changed);
+ZMK_SUBSCRIPTION(widget_battery_status, zmk_peripheral_battery_state_changed);
 #if IS_ENABLED(CONFIG_USB_DEVICE_STACK)
 ZMK_SUBSCRIPTION(widget_battery_status, zmk_usb_conn_state_changed);
 #endif /* IS_ENABLED(CONFIG_USB_DEVICE_STACK) */
