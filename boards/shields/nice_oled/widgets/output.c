@@ -22,7 +22,7 @@ static void draw_ble_unbonded(lv_obj_t *canvas, const struct util_position *pos)
   lv_draw_img_dsc_init(&img_dsc);
 
   // 36 - 39
-  const int x = pos->x + -1;
+  const int x = pos->x;
   const int y = pos->y;
   lv_canvas_draw_img(canvas, x, y, &bt_unbonded, &img_dsc);
 }
@@ -32,7 +32,7 @@ static void draw_ble_disconnected(lv_obj_t *canvas, const struct util_position *
   lv_draw_img_dsc_t img_dsc;
   lv_draw_img_dsc_init(&img_dsc);
 
-  const int x = pos->x;
+  const int x = pos->x + 1;
   const int y = pos->y;
   lv_canvas_draw_img(canvas, x, y, &bt_no_signal, &img_dsc);
 }
@@ -40,9 +40,23 @@ static void draw_ble_disconnected(lv_obj_t *canvas, const struct util_position *
 static void draw_ble_connected(lv_obj_t *canvas, const struct util_position *pos) {
   lv_draw_img_dsc_t img_dsc;
   lv_draw_img_dsc_init(&img_dsc);
-  const int x = pos->x;
+  const int x = pos->x + 1;
   const int y = pos->y;
   lv_canvas_draw_img(canvas, x, y, &bt, &img_dsc);
+}
+
+static void draw_active_profile_text(lv_obj_t *canvas, const struct status_state *state,
+		const struct util_position *pos) {
+	// new label_dsc
+	lv_draw_label_dsc_t label_dsc;
+	init_label_dsc(&label_dsc, LVGL_FOREGROUND, &pixel_operator_mono_8, LV_TEXT_ALIGN_LEFT);
+
+	// buffer size should be enough for largest number + null character
+	char text[14] = {};
+	snprintf(text, sizeof(text), "%d", state->active_profile_index + 1);
+
+	const int x = pos->x + 23;
+	lv_canvas_draw_text(canvas, x, pos->y, 35, &label_dsc, text);
 }
 
 void draw_output_status(lv_obj_t *canvas, const struct status_state *state, const struct util_position *pos) {
@@ -69,7 +83,8 @@ void draw_output_status(lv_obj_t *canvas, const struct status_state *state, cons
     } else {
       draw_ble_unbonded(canvas, pos);
     }
-    break;
+	draw_active_profile_text(canvas, state, pos);
+	break;
   }
 #else
   if (state->connected) {
