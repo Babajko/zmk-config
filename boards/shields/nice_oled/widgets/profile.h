@@ -3,7 +3,5 @@
 #include <lvgl.h>
 #include "util.h"
 
-void draw_profile_status(lv_obj_t *canvas, const struct status_state *state, const struct util_position *pos);
-
-void draw_active_profile_text(
-		lv_obj_t *canvas, const struct status_state *state, const struct util_position *pos);
+void draw_profile_status(lv_obj_t *canvas, const struct status_state *state,
+		const struct util_position *pos);
