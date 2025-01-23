@@ -56,17 +56,15 @@ static void draw_canvas(lv_obj_t *widget, lv_color_t cbuf[],
   draw_background(canvas);
   draw_output_status(canvas, state, &zero_pos);
 
-  // const struct util_position w_profile_text_pos = {.x = zero_pos.x + 25, .y = zero_pos.y};
-  // draw_active_profile_text(canvas, state, &w_profile_text_pos);
-
   const struct util_position w_battery_pos = {.x = zero_pos.x + 32, .y = zero_pos.y};
   draw_battery_status(canvas, state, &w_battery_pos);
 
   //   draw_wpm_status(canvas, state, &zero_pos);
-  const struct util_position w_profile_pos = {.x = zero_pos.x + 5, .y = zero_pos.y + 25};
+  const struct util_position w_profile_pos = {.x = zero_pos.x + CANVAS_WIDTH / 2 - 17,
+		  .y = zero_pos.y + 22};
   draw_profile_status(canvas, state, &w_profile_pos);
 
-  const struct util_position w_status_pos = {.x = zero_pos.x, .y = zero_pos.y + 40};
+  const struct util_position w_status_pos = {.x = zero_pos.x + 15, .y = zero_pos.y + 40};
   draw_layer_status(canvas, state, &w_status_pos);
 
   // Rotate for horizontal display
@@ -112,6 +110,7 @@ ZMK_DISPLAY_WIDGET_LISTENER(widget_battery_status, struct battery_status_state,
                             battery_status_update_cb, battery_status_get_state);
 
 ZMK_SUBSCRIPTION(widget_battery_status, zmk_battery_state_changed);
+// ZMK_SUBSCRIPTION(widget_battery_status, zmk_peripheral_battery_state_changed);
 #if IS_ENABLED(CONFIG_USB_DEVICE_STACK)
 ZMK_SUBSCRIPTION(widget_battery_status, zmk_usb_conn_state_changed);
 #endif /* IS_ENABLED(CONFIG_USB_DEVICE_STACK) */
