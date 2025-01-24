@@ -5,20 +5,16 @@
 
 LV_IMG_DECLARE(bolt);
 
-static void draw_level(lv_obj_t *canvas, const struct status_state *state, const struct util_position *pos) {
-  lv_draw_label_dsc_t label_right_dsc;
-  init_label_dsc(&label_right_dsc, LVGL_FOREGROUND, &pixel_operator_mono,
-                 LV_TEXT_ALIGN_LEFT);
-  // LV_TEXT_ALIGN_RIGHT);
+static void draw_level(lv_obj_t *canvas, uint8_t level, const struct util_position *pos) {
+	lv_draw_label_dsc_t label_right_dsc;
+	init_label_dsc(&label_right_dsc, LVGL_FOREGROUND, &pixel_operator_mono, LV_TEXT_ALIGN_LEFT);
 
-  char text[10] = {};
+	char text[10] = {};
 
-  sprintf(text, "%i%%", state->battery);
-  // sprintf(text, "%i%%", state->battery);
-  // x, y, width, dsc, text
-  const int x = pos->x;
-  const int y = pos->y;
-  lv_canvas_draw_text(canvas, x, y, 42, &label_right_dsc, text);
+	sprintf(text, "%3i%%", level);
+	const int x = pos->x;
+	const int y = pos->y;
+	lv_canvas_draw_text(canvas, x, y, 42, &label_right_dsc, text);
 }
 
 static void draw_charging_level(lv_obj_t *canvas,
@@ -52,6 +48,11 @@ void draw_battery_status(lv_obj_t *canvas, const struct status_state *state, con
   if (state->charging) {
     draw_charging_level(canvas, state, pos);
   } else {
-    draw_level(canvas, state, pos);
+	  draw_level(canvas, state->battery, pos);
   }
+
+#if IS_ENABLED(CONFIG_ZMK_SPLIT_BLE_CENTRAL_BATTERY_LEVEL_FETCHING)
+  const struct util_position p_pos = {.x = pos->x, .y = pos->y + 15};
+  draw_level(canvas, state->p_level, &p_pos);
+#endif /* IS_ENABLED(CONFIG_ZMK_SPLIT_BLE_CENTRAL_BATTERY_LEVEL_FETCHING) */
 }

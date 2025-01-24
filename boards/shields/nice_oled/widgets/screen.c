@@ -61,10 +61,10 @@ static void draw_canvas(lv_obj_t *widget, lv_color_t cbuf[],
 
   //   draw_wpm_status(canvas, state, &zero_pos);
   const struct util_position w_profile_pos = {.x = zero_pos.x + CANVAS_WIDTH / 2 - 17,
-		  .y = zero_pos.y + 22};
+		  .y = zero_pos.y + 35};
   draw_profile_status(canvas, state, &w_profile_pos);
 
-  const struct util_position w_status_pos = {.x = zero_pos.x + 15, .y = zero_pos.y + 40};
+  const struct util_position w_status_pos = {.x = zero_pos.x, .y = zero_pos.y + 45};
   draw_layer_status(canvas, state, &w_status_pos);
 
   // Rotate for horizontal display
@@ -76,14 +76,20 @@ static void draw_canvas(lv_obj_t *widget, lv_color_t cbuf[],
  **/
 
 static void set_battery_status(struct zmk_widget_screen *widget,
-                               struct battery_status_state state) {
+		struct battery_status_state state) {
+#if IS_ENABLED(CONFIG_ZMK_SPLIT_BLE_CENTRAL_BATTERY_LEVEL_FETCHING)
+	if (state.source == BATTERY_DATA_SOURCE_PERIPHERAL) {
+		widget->state.p_level = state.p_level;
+	} else if (state.source == BATTERY_DATA_SOURCE_CENTRAL)
+#endif /* IS_ENABLED(CONFIG_ZMK_SPLIT_BLE_CENTRAL_BATTERY_LEVEL_FETCHING) */
+	{
+		widget->state.battery = state.level;
 #if IS_ENABLED(CONFIG_USB_DEVICE_STACK)
-  widget->state.charging = state.usb_present;
+		widget->state.charging = state.usb_present;
 #endif /* IS_ENABLED(CONFIG_USB_DEVICE_STACK) */
+	}
 
-  widget->state.battery = state.level;
-
-  draw_canvas(widget->obj, widget->cbuf, &widget->state);
+	draw_canvas(widget->obj, widget->cbuf, &widget->state);
 }
 
 static void battery_status_update_cb(struct battery_status_state state) {
@@ -93,31 +99,48 @@ static void battery_status_update_cb(struct battery_status_state state) {
   }
 }
 
-static struct battery_status_state
-battery_status_get_state(const zmk_event_t *eh) {
-	if (as_zmk_peripheral_battery_state_changed(eh) != NULL) {
-		const struct zmk_peripheral_battery_state_changed *ev =
-				as_zmk_peripheral_battery_state_changed(eh);
+static struct battery_status_state central_battery_status_get_state(const zmk_event_t *eh) {
+	const struct zmk_battery_state_changed *ev = as_zmk_battery_state_changed(eh);
 
-		LOG_DBG("peripheral_battery_state_changed, source: %d, state_of_charge: %d", ev->source + 1,
-				ev->state_of_charge);
-	}
-  const struct zmk_battery_state_changed *ev = as_zmk_battery_state_changed(eh);
-
-  return (struct battery_status_state){
-      .level =
-          (ev != NULL) ? ev->state_of_charge : zmk_battery_state_of_charge(),
+	return (struct battery_status_state){
+			.level = (ev != NULL) ? ev->state_of_charge : zmk_battery_state_of_charge(),
 #if IS_ENABLED(CONFIG_USB_DEVICE_STACK)
-      .usb_present = zmk_usb_is_powered(),
+			.usb_present = zmk_usb_is_powered(),
 #endif /* IS_ENABLED(CONFIG_USB_DEVICE_STACK) */
-  };
+	};
+}
+
+#if IS_ENABLED(CONFIG_ZMK_SPLIT_BLE_CENTRAL_BATTERY_LEVEL_FETCHING)
+static struct battery_status_state peripheral_battery_status_get_state(const zmk_event_t *eh) {
+	const struct zmk_peripheral_battery_state_changed *ev =
+			as_zmk_peripheral_battery_state_changed(eh);
+	LOG_DBG("peripheral_battery_state_changed, source: %d, state_of_charge: %d", ev->source + 1,
+			ev->state_of_charge);
+	return (struct battery_status_state){
+			.source = BATTERY_DATA_SOURCE_PERIPHERAL,
+			.p_level = ev->state_of_charge,
+	};
+}
+#endif /* IS_ENABLED(CONFIG_ZMK_SPLIT_BLE_CENTRAL_BATTERY_LEVEL_FETCHING) */
+
+static struct battery_status_state battery_status_get_state(const zmk_event_t *eh) {
+#if IS_ENABLED(CONFIG_ZMK_SPLIT_BLE_CENTRAL_BATTERY_LEVEL_FETCHING)
+	if (as_zmk_peripheral_battery_state_changed(eh) != NULL) {
+		return peripheral_battery_status_get_state(eh);
+	} else
+#endif /* IS_ENABLED(CONFIG_ZMK_DONGLE_DISPLAY_DONGLE_BATTERY) */
+	{
+		return central_battery_status_get_state(eh);
+	}
 }
 
 ZMK_DISPLAY_WIDGET_LISTENER(widget_battery_status, struct battery_status_state,
                             battery_status_update_cb, battery_status_get_state);
 
 ZMK_SUBSCRIPTION(widget_battery_status, zmk_battery_state_changed);
+#if IS_ENABLED(CONFIG_ZMK_SPLIT_BLE_CENTRAL_BATTERY_LEVEL_FETCHING)
 ZMK_SUBSCRIPTION(widget_battery_status, zmk_peripheral_battery_state_changed);
+#endif /* IS_ENABLED(CONFIG_ZMK_DONGLE_DISPLAY_DONGLE_BATTERY) */
 #if IS_ENABLED(CONFIG_USB_DEVICE_STACK)
 ZMK_SUBSCRIPTION(widget_battery_status, zmk_usb_conn_state_changed);
 #endif /* IS_ENABLED(CONFIG_USB_DEVICE_STACK) */
