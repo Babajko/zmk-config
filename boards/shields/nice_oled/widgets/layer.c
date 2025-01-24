@@ -15,8 +15,8 @@ void draw_layer_status(lv_obj_t *canvas, const struct status_state *state, const
 
 	LOG_DBG("draw_layer_status, index: %d, label: %s", state->layer_index, state->layer_label);
 	if (state->layer_label == NULL || strlen(state->layer_label) == 0) {
-		// result = snprintf(text, sizeof(text), "Layer %i", state->layer_index);
-		result = snprintf(text, sizeof(text), LV_SYMBOL_KEYBOARD " %i", state->layer_index);
+		result = snprintf(text, sizeof(text), "Layer %i", state->layer_index);
+		// result = snprintf(text, sizeof(text), LV_SYMBOL_KEYBOARD " %i", state->layer_index);
 	} else {
 		result = snprintf(text, sizeof(text), "%s", state->layer_label);
 		for (int i = 0; text[i] != '\0'; i++) {
