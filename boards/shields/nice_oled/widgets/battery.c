@@ -28,8 +28,7 @@ static void draw_charging_level(lv_obj_t *canvas,
 
   char text[10] = {};
 
-  sprintf(text, "%i", state->battery);
-  // sprintf(text, "%i%%", state->battery);
+  sprintf(text, "%3i", state->battery);
   int x = pos->x;
   const int y = pos->y;
   lv_canvas_draw_text(canvas, x, y, 35, &label_right_dsc, text);
