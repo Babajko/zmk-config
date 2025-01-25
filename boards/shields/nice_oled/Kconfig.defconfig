@@ -68,6 +68,7 @@ config NICE_VIEW_WIDGET_STATUS
     select LV_FONT_MONTSERRAT_18
     select LV_FONT_MONTSERRAT_14
     select LV_FONT_UNSCII_8
+    select LV_USE_LINE 
 
 config NICE_VIEW_WIDGET_INVERTED
     bool "Invert display colors"
