@@ -56,22 +56,20 @@ static void draw_layer_status_bubbles(lv_obj_t *canvas, const struct status_stat
 	init_label_dsc(&label_dsc_black, LVGL_BACKGROUND, &lv_font_montserrat_18, LV_TEXT_ALIGN_CENTER);
 
 	// Draw circles
-	// int circle_offsets[5][2] = {
-	// 		{13, 13},
-	// 		{55, 13},
-	// 		{34, 34},
-	// 		{13, 55},
-	// 		{55, 55},
-	// };
+	// Coordinats for 4 circles
+	// {15, 13},
+	// {50, 13},
+	// {15, 44},
+	// {50, 44},
+
 	const struct util_position circle_offsets[] = {
 			{15, 13},
-			{49, 13},
-			{13, 43},
-			{49, 43},
+			{50, 13},
+			{32, 35},
 	};
 
 	for (int i = 0; i < count_of(circle_offsets); i++) {
-		const bool selected = i == state->layer_index;
+		const bool selected = i + 1 == state->layer_index;
 		const struct util_position circle_pos = {.x = pos->x + circle_offsets[i].x,
 				.y = pos->y + circle_offsets[i].y};
 
@@ -82,7 +80,7 @@ static void draw_layer_status_bubbles(lv_obj_t *canvas, const struct status_stat
 		}
 
 		char label[2];
-		snprintf(label, sizeof(label), "%d", i);
+		snprintf(label, sizeof(label), "%d", i + 1);
 		lv_canvas_draw_text(canvas, circle_pos.x - 8, circle_pos.y - 10, 16,
 				(selected ? &label_dsc_black : &label_dsc), label);
 	}
