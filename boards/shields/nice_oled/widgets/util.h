@@ -7,6 +7,8 @@
 #define CANVAS_HEIGHT 128
 #define UTIL_ROTATE 2700
 
+#define count_of(x) (sizeof(x) / sizeof(0 [x]))
+
 struct util_position {
     int x;
     int y;
