@@ -61,7 +61,7 @@ static void draw_canvas(lv_obj_t *widget, lv_color_t cbuf[],
 
   //   draw_wpm_status(canvas, state, &zero_pos);
   const struct util_position w_profile_pos = {.x = zero_pos.x + CANVAS_WIDTH / 2 - 17,
-		  .y = zero_pos.y + 35};
+		  .y = zero_pos.y + 33};
   draw_profile_status(canvas, state, &w_profile_pos);
 
   const struct util_position w_status_pos = {.x = zero_pos.x, .y = zero_pos.y + 45};
