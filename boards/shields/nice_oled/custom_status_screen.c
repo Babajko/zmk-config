@@ -27,7 +27,7 @@ lv_obj_t *zmk_display_status_screen() {
 #endif
 
   zmk_widget_modifiers_init(&modifiers_widget, screen);
-  lv_obj_align(zmk_widget_modifiers_obj(&modifiers_widget), LV_ALIGN_BOTTOM_RIGHT, 0, 0);
+  lv_obj_align(zmk_widget_modifiers_obj(&modifiers_widget), LV_ALIGN_TOP_RIGHT, 0, 0);
 
   return screen;
 }
