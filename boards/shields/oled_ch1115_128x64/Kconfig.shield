@@ -1,0 +1,5 @@
+# Copyright (c) 2024 The ZMK Contributors
+# SPDX-License-Identifier: MIT
+
+config SHIELD_OLED_CH1115_128X64
+    def_bool $(shields_list_contains,oled_ch1115_128x64)
