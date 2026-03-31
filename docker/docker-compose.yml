@@ -1,0 +1,24 @@
+services:
+  zmk-builder:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+      target: builder
+    volumes:
+      # Mount configuration for editing
+      - ../config:/workspace/config:ro
+      - ../boards:/workspace/boards:ro
+      - ../build.yaml:/workspace/build.yaml:ro
+      # Output directory for firmware
+      - ../firmware:/output
+      # Volume for build cache (speeds up subsequent builds)
+      - zmk-build-cache:/workspace/build
+    environment:
+      - TZ=Europe/Kiev
+      - BUILD_UID=${BUILD_UID:-1000}
+      - BUILD_GID=${BUILD_GID:-1000}
+    working_dir: /workspace
+
+volumes:
+  zmk-build-cache:
+    driver: local
