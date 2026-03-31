@@ -1,0 +1,13 @@
+.git
+.github
+firmware
+*.md
+.vscode
+.gitignore
+
+.west/
+bootloader/
+modules/
+tools/
+
+
