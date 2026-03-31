@@ -1,0 +1,19 @@
+# Copyright (c) 2024 The ZMK Contributors
+# SPDX-License-Identifier: MIT
+
+if SHIELD_OLED_CH1115_128X64
+
+config ZMK_DISPLAY
+    select LVGL_USE_LABEL
+    select LVGL_USE_IMG
+    select LVGL_FONT_MONTSERRAT_26
+    select LVGL_FONT_UNSCII_8
+
+if ZMK_DISPLAY
+
+config I2C
+    default y
+
+endif # ZMK_DISPLAY
+
+endif # SHIELD_OLED_CH1115_128X64
