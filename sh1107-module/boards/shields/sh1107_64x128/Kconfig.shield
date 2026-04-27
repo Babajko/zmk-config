@@ -1,0 +1,2 @@
+config SHIELD_SH1107_64X128
+    def_bool $(shields_list_contains,sh1107_64x128)

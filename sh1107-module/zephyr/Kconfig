@@ -1,0 +1,25 @@
+# SH1107 display module Kconfig
+# Copyright (c) 2024
+# SPDX-License-Identifier: GPL 
+
+menuconfig SH1107
+	bool "SH1107 OLED display driver"
+	default y
+	depends on DT_HAS_SINOWEALTH_SH1107_ENABLED
+	select I2C if $(dt_compat_on_bus,$(DT_COMPAT_SINOWEALTH_SH1107),i2c)
+	select SPI if $(dt_compat_on_bus,$(DT_COMPAT_SINOWEALTH_SH1107),spi)
+	help
+	  Enable driver for SH1107 OLED display controller.
+	  Supports I2C and SPI interfaces.
+	  Common resolutions: 64x128, 128x128.
+
+if SH1107
+
+config SH1107_DEFAULT_CONTRAST
+	int "SH1107 default contrast"
+	default 127
+	range 0 255
+	help
+	  Default contrast level for SH1107 display.
+
+endif # SH1107
