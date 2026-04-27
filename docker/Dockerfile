@@ -23,6 +23,14 @@ RUN west init -l config/ && \
     west update && \
     west zephyr-export
 
+# Patch ZMK Kconfig warning (ZMK_KSCAN_DIRECT_POLLING defined without type)
+RUN sed -i 's/^config ZMK_KSCAN_DIRECT_POLLING$/config ZMK_KSCAN_DIRECT_POLLING\n\tbool/' \
+    /workspace/zmk/app/boards/shields/clueboard_california/Kconfig.defconfig || true
+
+# Patch Zephyr device name length limit (increase from 48 to 64)
+RUN sed -i 's/Z_DEVICE_MAX_NAME_LEN 48/Z_DEVICE_MAX_NAME_LEN 64/' \
+    /workspace/zephyr/include/zephyr/device.h || true
+
 # Install Python dependencies (cached)
 RUN python3 -m pip install --break-system-packages --no-cache-dir -r zephyr/scripts/requirements.txt
 
@@ -33,6 +41,7 @@ FROM zmk-base AS builder
 COPY config ./config
 COPY build.yaml ./
 COPY boards ./boards
+COPY sh1107-module ./sh1107-module
 
 # Copy script for parsing build.yaml
 COPY docker/scripts/parse_build_yaml.py /usr/local/bin/

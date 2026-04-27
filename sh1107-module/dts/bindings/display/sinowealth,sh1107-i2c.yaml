@@ -1,0 +1,8 @@
+# Copyright (c) 2024
+# SPDX-License-Identifier: GPL 
+
+description: SH1107 OLED display controller on I2C bus
+
+compatible: "sinowealth,sh1107"
+
+include: ["sinowealth,sh1107-common.yaml", "i2c-device.yaml"]

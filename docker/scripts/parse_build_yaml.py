@@ -39,10 +39,12 @@ def generate_build_commands(builds, output_dir='/output'):
         cmake_args = build['cmake_args']
         
         shield_name = shield.split()[0] if shield else 'default'
-        output_file = f"{output_dir}/{shield_name}-{board}-zmk.uf2"
+        # Replace // in board name for valid filename
+        board_safe = board.replace('//', '_')
+        output_file = f"{output_dir}/{shield_name}-{board_safe}-zmk.uf2"
         
         cmd_parts = [
-            'west build -p -s zmk/app',
+            'west build -p -s /workspace/zmk/app',
             f'-b {board}',
             '--'
         ]
@@ -51,7 +53,6 @@ def generate_build_commands(builds, output_dir='/output'):
             cmd_parts.append(f'-DSHIELD="{shield}"')
         
         cmd_parts.append('-DZMK_CONFIG="/workspace/config"')
-        cmd_parts.append('-DBOARD_ROOT="/workspace"')
         
         if cmake_args:
             cmd_parts.append(cmake_args)

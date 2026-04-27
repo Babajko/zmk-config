@@ -1,0 +1,31 @@
+/*
+ * SH1107 64x128 OLED Display Shield
+ * Compatible with Pro Micro pinout boards
+ */
+
+/delete-node/ &oled;
+
+&pro_micro_i2c {
+    status = "okay";
+    
+    sh1107_display: sh1107@3c {
+        compatible = "sinowealth,sh1107";
+        reg = <0x3c>;
+        width = <64>;
+        height = <128>;
+        segment-offset = <0>;
+        page-offset = <0>;
+        display-offset = <96>;    /* Required for 64x128 displays */
+        multiplex-ratio = <127>;
+        segment-remap;            /* Flip horizontally */
+        com-invdir;               /* Flip vertically */
+        prechargep = <0x22>;
+        contrast = <0x2F>;
+    };
+};
+
+/ {
+    chosen {
+        zephyr,display = &sh1107_display;
+    };
+};

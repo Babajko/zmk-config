@@ -1,0 +1,77 @@
+# Copyright (c) 2024
+# SPDX-License-Identifier: GPL 
+
+description: |
+  SH1107 OLED display controller common properties.
+  Supports 64x128, 128x128 configurations.
+
+include: display-controller.yaml
+
+properties:
+  width:
+    type: int
+    required: true
+    description: Display width in pixels (typically 64 or 128)
+
+  height:
+    type: int
+    required: true
+    description: Display height in pixels (typically 128)
+
+  segment-offset:
+    type: int
+    default: 0
+    description: Column offset for RAM to SEG mapping
+
+  page-offset:
+    type: int
+    default: 0
+    description: Page start offset (each page = 8 rows)
+
+  display-offset:
+    type: int
+    default: 0
+    description: |
+      Display offset (0x00-0x7F). Maps display start line to COM0 + offset.
+      For 64x128 displays typically 96 (0x60).
+
+  multiplex-ratio:
+    type: int
+    default: 127
+    description: Multiplex ratio. Set to (height - 1).
+
+  segment-remap:
+    type: boolean
+    description: Map column address 127 to SEG0 (flip horizontally)
+
+  com-invdir:
+    type: boolean
+    description: Invert COM scan direction (flip vertically)
+
+  prechargep:
+    type: int
+    default: 0x22
+    description: Pre-charge period (phase1 in lower nibble, phase2 in upper)
+
+  contrast:
+    type: int
+    default: 0x80
+    description: Initial contrast value (0x00-0xFF)
+
+  clock-div-ratio:
+    type: int
+    default: 0x51
+    description: Clock divide ratio and oscillator frequency
+
+  vcom-deselect:
+    type: int
+    default: 0x35
+    description: VCOM deselect level
+
+  inversion-on:
+    type: boolean
+    description: Enable display inversion mode
+
+  dcdc-on:
+    type: boolean
+    description: Enable internal DC-DC charge pump (default on)
